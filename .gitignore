@@ -1,0 +1,9 @@
+# dependencies
+node_modules/
+
+# javascript
+*.js
+*.js.map
+
+# out dir
+dist/
