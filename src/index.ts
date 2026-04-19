@@ -82,7 +82,7 @@ class Player extends GameObject {
 function getCanvas() {
     let canvas = document.getElementById("main-canvas") as HTMLCanvasElement;
     let context = canvas.getContext("2d");
-    return {canvas, context};
+    return { canvas, context };
 }
 
 function createGameObjects() {
@@ -94,17 +94,17 @@ function createGameObjects() {
         3, // speed,
         "../assets/art/player.png", // imagePath (I typed the path of this without looking at the folders first try!!!!)
     );
-    return {player};
+    return { player };
 }
 
-let {canvas, context} = getCanvas();
+let { canvas, context } = getCanvas();
 if (!context) {
     console.error("Canvas context missing");
 } else {
     let backgroundImage = new Image();
     backgroundImage.src = "../assets/art/Background.png";
 
-    let {player} = createGameObjects();
+    let { player } = createGameObjects();
     player.x = (canvas.width / 2) - (player.w / 2);
     player.y = canvas.height - (player.h * 2);
     player.startInput();
