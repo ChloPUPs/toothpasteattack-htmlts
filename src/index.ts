@@ -29,6 +29,11 @@ abstract class GameObject implements Vector2 {
         newImage.src = imagePath;
         this.image = newImage;
     }
+
+    applyVelocity(): void {
+        this.x += this.vel.x;
+        this.y += this.vel.y;
+    }
 }
 
 class Player extends GameObject {
