@@ -97,14 +97,43 @@ function createGameObjects() {
     return { player };
 }
 
+let audioButton = document.getElementById("audio-button") as HTMLButtonElement;
+let audioTurnedOn = false;
+
+let music = document.getElementById("music") as HTMLAudioElement;
+let isMusicPlaying = false;
+music.volume = 0;
+
+audioButton.addEventListener("click", () => {
+    audioTurnedOn = !audioTurnedOn;
+    if (audioTurnedOn) {
+        audioButton.textContent = "Turn Audio Off";
+        music.volume = 1;
+
+        if (!isMusicPlaying) {
+            isMusicPlaying = true;
+            music.play().catch(
+                (reason) => {
+                    console.error("Failed to load music:", reason);
+                    isMusicPlaying = false;
+                }
+            );
+        }
+    } else {
+        audioButton.textContent = "Turn Audio On";
+        music.volume = 0;
+    }
+});
+
+let backgroundImage = new Image();
+backgroundImage.src = "../assets/art/Background.png";
+
+let { player } = createGameObjects();
+
 let { canvas, context } = getCanvas();
 if (!context) {
     console.error("Canvas context missing");
 } else {
-    let backgroundImage = new Image();
-    backgroundImage.src = "../assets/art/Background.png";
-
-    let { player } = createGameObjects();
     player.x = (canvas.width / 2) - (player.w / 2);
     player.y = canvas.height - (player.h * 2);
     player.startInput();
