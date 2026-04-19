@@ -3,7 +3,14 @@ interface Vector2 {
     y: number,
 }
 
-abstract class GameObject implements Vector2 {
+interface MovementInput {
+    left: boolean,
+    right: boolean,
+    up: boolean,
+    down: boolean,
+}
+
+class GameObject implements Vector2 {
     x: number;
     y: number;
     vel: Vector2;
@@ -37,9 +44,37 @@ abstract class GameObject implements Vector2 {
 }
 
 class Player extends GameObject {
+    dir: Vector2;
+    movInput: MovementInput;
+
+    constructor(
+        x: number, y: number,
+        w: number, h: number,
+        speed: number,
+        imagePath: string,
+    ) {
+        super(x, y, w, h, speed, imagePath);
+        this.dir = { x: 0, y: 0 };
+        this.movInput = {
+            left: false,
+            right: false,
+            up: false,
+            down: false,
+        };
+    }
+
     startInput(): void {
         document.addEventListener("keydown", (event) => {
-            // TODO: add player input here
+            if (event.key == "ArrowLeft") this.movInput.left = true;
+            if (event.key == "ArrowRight") this.movInput.right = true;
+            if (event.key == "ArrowUp") this.movInput.up = true;
+            if (event.key == "ArrowDown") this.movInput.down = true;
+        });
+        document.addEventListener("keyup", (event) => {
+            if (event.key == "ArrowLeft") this.movInput.left = false;
+            if (event.key == "ArrowRight") this.movInput.right = false;
+            if (event.key == "ArrowUp") this.movInput.up = false;
+            if (event.key == "ArrowDown") this.movInput.down = false;
         });
     }
 }
@@ -56,7 +91,7 @@ function createGameObjects() {
         0, // y
         32, // w
         32, // h
-        2, // speed,
+        3, // speed,
         "../assets/art/player.png", // imagePath (I typed the path of this without looking at the folders first try!!!!)
     );
     return {player};
@@ -75,7 +110,11 @@ if (!context) {
     player.startInput();
 
     let update = () => {
-        // TODO: make apply velocity method for Player and call it here in player.
+        player.dir.x = -(player.movInput.left ? 1 : 0) + (player.movInput.right ? 1 : 0);
+        player.dir.y = -(player.movInput.up ? 1 : 0) + (player.movInput.down ? 1 : 0);
+        player.vel.x = player.dir.x * player.speed;
+        player.vel.y = player.dir.y * player.speed;
+        player.applyVelocity();
     };
     setInterval(update, 17);
 
