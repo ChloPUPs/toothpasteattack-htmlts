@@ -37,9 +37,13 @@ class GameObject implements Vector2 {
         this.image = newImage;
     }
 
-    applyVelocity(): void {
-        this.x += this.vel.x;
-        this.y += this.vel.y;
+    applyVelocity(timePassed: number): void {
+        if (this.vel.x != 0) {
+            this.x += (timePassed * 0.7) / this.vel.x;
+        }
+        if (this.vel.y != 0) {
+            this.y += (timePassed * 0.7) / this.vel.y;
+        }
     }
 }
 
@@ -108,6 +112,8 @@ let { player } = createGameObjects();
 
 let { canvas, context } = getCanvas();
 
+let lastTimestamp: number;
+
 function startGame() {
     if (!context) {
         console.error("Canvas context missing");
@@ -120,22 +126,31 @@ function startGame() {
     player.y = canvas.height - (player.h * 2);
     player.startInput();
 
-    let update = () => {
+    let anim = (timestamp: number) => {
+        if (!lastTimestamp) {
+            lastTimestamp = timestamp;
+            requestAnimationFrame(anim);
+            return;
+        }
+
+        let timePassed = timestamp - lastTimestamp;
+
+        console.log(timePassed);
+
         player.dir.x = -(player.movInput.left ? 1 : 0) + (player.movInput.right ? 1 : 0);
         player.dir.y = -(player.movInput.up ? 1 : 0) + (player.movInput.down ? 1 : 0);
         player.vel.x = player.dir.x * player.speed;
         player.vel.y = player.dir.y * player.speed;
-        player.applyVelocity();
-    };
-    setInterval(update, 17);
+        player.applyVelocity(timePassed);
 
-    let draw = () => {
         context.drawImage(backgroundImage, 0, 0);
         context.drawImage(player.image, player.x, player.y);
 
-        requestAnimationFrame(draw);
+        lastTimestamp = timestamp;
+
+        requestAnimationFrame(anim);
     }
-    requestAnimationFrame(draw);
+    requestAnimationFrame(anim);
 }
 
 startButton.addEventListener("click", () => {
