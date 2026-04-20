@@ -144,7 +144,7 @@ function startGame() {
         player.applyVelocity(timePassed);
 
         context.drawImage(backgroundImage, 0, 0);
-        context.drawImage(player.image, player.x, player.y);
+        context.drawImage(player.image, Math.floor(player.x), Math.floor(player.y));
 
         lastTimestamp = timestamp;
 
