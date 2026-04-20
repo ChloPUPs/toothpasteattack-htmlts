@@ -143,8 +143,12 @@ function startGame() {
         player.vel.y = player.dir.y * player.speed;
         player.applyVelocity(timePassed);
 
+        // Begin Drawing
+
         context.drawImage(backgroundImage, 0, 0);
         context.drawImage(player.image, Math.floor(player.x), Math.floor(player.y));
+
+        // End Drawing
 
         lastTimestamp = timestamp;
 
