@@ -1,3 +1,6 @@
+/* Toothpaste Attack! (htmlts edition) */
+// Maybe add hitbox padding?
+
 interface Vector2 {
     x: number;
     y: number;
